@@ -1,0 +1,55 @@
+/* reset.css */
+
+/* Убираем отступы, поля и бордюры */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Убираем стиль списка */
+ul, ol {
+    list-style: none;
+}
+
+/* Убираем стандартное подчеркивание у ссылок */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Убираем бордюры и фон у кнопок */
+button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Убираем стили у изображений */
+img {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Убираем стандартные стили у таблиц */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Убираем оформление форм */
+input, textarea, select {
+    font: inherit;
+    color: inherit;
+    border: none;
+    outline: none;
+}
+
+/* Убираем стандартные стили полей форм */
+textarea {
+    resize: none;
+}
+
