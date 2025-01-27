@@ -28,8 +28,28 @@ $(document).ready(function() {
 
     $('#file-input').on('change', function () {
         var fileName = $(this).val().split('\\').pop(); 
-        $(this).siblings('.attached-filename').text(fileName);
-        $(this).siblings('.attached-filename').show();
+        const fileInput = $('#file-input');
+        const fileLabel = $('.custom-file-label');
+        const fileValue = fileInput.val(); // Получаем значение поля файла
+
+        if (!fileValue) {
+        isValid = false;
+        fileLabel.addClass('error');
+        } else {
+        const allowedExtensions = ['pdf', 'doc', 'docx', 'jpg', 'png']; // Допустимые расширения
+        const fileExtension = fileValue.split('.').pop().toLowerCase();
+
+        if (!allowedExtensions.includes(fileExtension)) {
+            isValid = false;
+            fileLabel.addClass('error');
+            alert('Недопустимый формат файла. Разрешены: ' + allowedExtensions.join(', '));
+        } else {
+            fileLabel.removeClass('error');
+            $(this).siblings('.attached-filename').text(fileName);
+            $(this).siblings('.attached-filename').show();
+        }
+        }
+        
       });
 
 
