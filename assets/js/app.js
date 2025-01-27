@@ -15,35 +15,6 @@ $(document).ready(function() {
         $("html, body").removeClass("ovh");
     });
 
-
-    var track = $('.track');
-    track.owlCarousel({
-        loop:true,
-        nav:false,
-        dots:false,
-        margin:10,
-        responsive:{
-            0:{
-                items:1
-            },
-            768:{
-                items:2
-            },            
-            960:{
-                items:3
-            }
-        }
-    });
-    if ($(window).width() > 767) {
-        track.on('mousewheel', '.owl-stage', { passive: false }, function (e) {
-            if (e.originalEvent.deltaY > 0) {
-                track.trigger('next.owl.carousel');
-            } else {
-                track.trigger('prev.owl.carousel');
-            }
-            e.preventDefault();
-        });
-    }
     
 
 
@@ -55,46 +26,110 @@ $(document).ready(function() {
 
 
 
-
-    $('.product__main-slider').slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        dots: false,
-        fade: true,
-        // adaptiveHeight: true,
-        asNavFor: '.product__nav-slider'
-      });
-      $('.product__nav-slider').slick({
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        asNavFor: '.product__main-slider',
-        dots: false,
-        arrows: false,
-        centerMode: false,
-        focusOnSelect: true,
-        // adaptiveHeight: true
+    $('#file-input').on('change', function () {
+        var fileName = $(this).val().split('\\').pop(); 
+        $(this).siblings('.attached-filename').text(fileName);
+        $(this).siblings('.attached-filename').show();
       });
 
-      var product_nav_slider = $(".product__nav-slider")
-      if ($(window).width() > 767) {
-        product_nav_slider.on('mousewheel', function (e) {
-            if (e.originalEvent.deltaY > 0) {
-                product_nav_slider.slick('slickNext');
+
+      $(".vacantes__item").on("click", function() {
+        let logo = $(this).find(".vacantes__logo img").attr("src");
+        let vacansy = $(this).find(".vacansy").text();
+        let is_local = $(this).find(".is_local").text();
+        console.log(is_local);
+        
+        let is_remote = is_local.replace(/[()]/g, '').trim();
+
+        $(".empleosPage").hide();
+        $(".empleosInnerDescription").show();
+
+        $("#profession").text(vacansy);
+        $(".empleosInner__info-item img").attr("src", logo);
+        $("#is_remote").text(is_remote);
+      })
+
+      $("#step_1").on("click", function() {
+        $(".empleosPage").show();
+        $(".empleosInnerDescription").hide();
+      })
+      $("#step_2").on("click", function() {
+        $(".empleosInnerDescription").show();
+        $(".empleosInnerForm").hide();
+      })
+
+      $("#blog_back").on("click", function() {
+        window.history.back();
+      })
+
+
+      $("#to_next").on("click", function() {
+        $(".empleosInnerDescription").hide();
+        $(".empleosInnerForm").show();
+      })
+
+      $("#form-submit").on("click", function(e) {
+        e.preventDefault();
+        let isValid = true;
+        
+        $('.empleosInner__form-inputs .form__input').each(function () {
+        const value = $(this).val().trim();
+
+        // Если поле пустое
+        if (value === '') {
+            isValid = false;
+            $(this).addClass('error'); // Добавляем класс для ошибки
+        } else {
+            $(this).removeClass('error'); // Убираем класс, если поле заполнено
+        }
+
+        // Дополнительная проверка для email
+        if ($(this).attr('name') === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+            isValid = false;
+            $(this).addClass('error');
             } else {
-                product_nav_slider.slick('slickPrev');
+            $(this).removeClass('error');
             }
-            e.preventDefault();
+        }
+
+        // Дополнительная проверка для телефона
+        if ($(this).attr('name') === 'tel') {
+            const telRegex = /^[0-9\+\-\(\)\s]+$/; // Только цифры и символы телефона
+            if (!telRegex.test(value)) {
+            isValid = false;
+            $(this).addClass('error');
+            } else {
+            $(this).removeClass('error');
+            }
+        }
         });
-    }
 
+        // Валидация файла
+        const fileInput = $('#file-input');
+        const fileLabel = $('.custom-file-label');
+        const fileValue = fileInput.val(); // Получаем значение поля файла
 
-    $(".ejemplos .card__img").owlCarousel({
-        loop:true,
-        nav:true,
-        dots:false,
-        margin:10,
-        items:1
-      });
+        if (!fileValue) {
+        isValid = false;
+        fileLabel.addClass('error');
+        } else {
+        const allowedExtensions = ['pdf', 'doc', 'docx', 'jpg', 'png']; // Допустимые расширения
+        const fileExtension = fileValue.split('.').pop().toLowerCase();
 
+        if (!allowedExtensions.includes(fileExtension)) {
+            isValid = false;
+            fileLabel.addClass('error');
+            alert('Недопустимый формат файла. Разрешены: ' + allowedExtensions.join(', '));
+        } else {
+            fileLabel.removeClass('error');
+        }
+        }
+
+        if (isValid) {
+        console.log('Форма успешно заполнена!');
+        // $('form').submit();
+        } 
+    })
 });
